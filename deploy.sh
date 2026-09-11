@@ -45,7 +45,7 @@ fi
 
 echo "=== [3/4] Compilando y publicando en Firebase ($PROJECT_ID) ==="
 npm run build -- --mode $MODE
-npx -y firebase-tools@latest deploy --project "$PROJECT_ID" --only firestore:rules,hosting
+npx -y firebase-tools@latest deploy --account esaalberdi@gmail.com --project "$PROJECT_ID" --only firestore:rules,hosting
 
 echo "=== [4/4] Confirmando y subiendo cambios a GitHub ==="
 git add .

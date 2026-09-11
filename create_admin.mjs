@@ -34,7 +34,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const adminEmail = process.env.ADMIN_EMAIL || 'admin@demob.com';
+const adminEmail = process.env.ADMIN_EMAIL || 'esaalberdi@gmail.com';
 const adminPassword = process.env.ADMIN_PASSWORD || 'Admin*123';
 
 async function createAdmin() {

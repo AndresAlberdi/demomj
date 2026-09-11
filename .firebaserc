@@ -1,7 +1,7 @@
 {
   "projects": {
-    "default": "demob-1e4a1",
-    "staging": "demob-1e4a1",
-    "production": "snack-laestacion"
+    "default": "pruebas-mj",
+    "staging": "pruebas-mj",
+    "production": "pruebas-mj"
   }
 }

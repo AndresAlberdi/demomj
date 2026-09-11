@@ -43,12 +43,13 @@ export const AuthProvider = ({ children }) => {
       if (user && !user.isAnonymous) {
         setCurrentUser(user);
         
-        const adminEmailEnv = import.meta.env.VITE_ADMIN_EMAIL || 'admin@demob.com';
+        const adminEmailEnv = import.meta.env.VITE_ADMIN_EMAIL || 'esaalberdi@gmail.com';
         // Special case for the main admin per instructions
         if (
+          user.email === 'esaalberdi@gmail.com' ||
           user.email === 'pretsodatabase@gmail.com' || 
           user.email === 'mrwally@snack.com' || 
-          user.email === 'admin@demob.com' ||
+          user.email === 'admin@demomj.com' ||
           user.email === adminEmailEnv
         ) {
           setUserRole('superadmin');
@@ -89,7 +90,7 @@ export const AuthProvider = ({ children }) => {
           await signInAnonymously(auth);
         } catch (anonErr) {
           if (anonErr.code === 'auth/admin-restricted-operation' || anonErr.code === 'auth/operation-not-allowed') {
-            const adminEmailEnv = import.meta.env.VITE_ADMIN_EMAIL || 'admin@demob.com';
+            const adminEmailEnv = import.meta.env.VITE_ADMIN_EMAIL || 'esaalberdi@gmail.com';
             const adminPasswordEnv = import.meta.env.VITE_ADMIN_PASSWORD || 'Admin*123';
             await signInWithEmailAndPassword(auth, adminEmailEnv, adminPasswordEnv);
           } else {
