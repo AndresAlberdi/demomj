@@ -25,11 +25,10 @@ Este conjunto de manuales cubre el ciclo completo de vida del sistema de punto d
    * Registro y cobranza de multas a vendedores.
    * Reportes de ventas, márgenes y flujo de caja.
 
-4. [📕 **Manual del Superadmin**](./Manual_Superadmin.md)
-   * Autenticación exclusiva mediante Google Sign-In (`esaalberdi@gmail.com` y `lemaitremariejoe@gmail.com`).
-   * Gobernanza de datos y seguridad de Firestore.
-   * Logs de auditoría global y trazabilidad de eventos.
-   * Respaldos, reseteo y sincronización de base de datos.
+4. [📕 **Manual de Dirección General (Superadmin)**](./Manual_Superadmin.md)
+   * Autenticación directiva exclusiva (`esaalberdi@gmail.com` y `lemaitremariejoe@gmail.com`).
+   * Auditoría integral y trazabilidad de operaciones del sistema.
+   * Respaldos, reseteo y sincronización de catálogo corporativo.
 
 5. [🤖 **Asistente RAG con IA Generativa**](./Manual_Superadmin.md#4-asistente-rag-con-ia-generativa)
    * Asistente inteligente flotante integrado en la plataforma.

@@ -19,7 +19,7 @@ export default function AIAssistantModal() {
     vendedor: { label: 'Vendedor / POS', color: '#15803d', bg: '#dcfce7' },
     supervisor: { label: 'Supervisor Turno', color: '#0369a1', bg: '#e0f2fe' },
     admin: { label: 'Administrador', color: '#7c3aed', bg: '#f3e8ff' },
-    superadmin: { label: 'Superadmin Google', color: '#b45309', bg: '#fef3c7' }
+    superadmin: { label: 'Superadmin', color: '#b45309', bg: '#fef3c7' }
   };
 
   const currentBadge = roleBadges[effectiveRole] || roleBadges.vendedor;
@@ -45,9 +45,9 @@ export default function AIAssistantModal() {
       '¿Cómo funciona la conciliación de flujo de caja?'
     ],
     superadmin: [
-      '¿Cuáles son las cuentas Google de Superadmin autorizadas?',
-      '¿Cómo exporto un respaldo completo de Firestore?',
-      '¿Dónde se auditan los registros de seguridad globales?'
+      '¿Cuáles son las cuentas directivas autorizadas?',
+      '¿Cómo descargo un respaldo general de datos del sistema?',
+      '¿Dónde se auditan los registros de operaciones globales?'
     ]
   };
 

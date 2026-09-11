@@ -31,7 +31,7 @@ describe('Hierarchical RAG Assistant - Security & Role Boundaries', () => {
       expect(q4.message).toContain('Acceso Restringido');
 
       // Trying to ask about superadmin features
-      const q5 = validateRoleQueryBoundary('¿Cómo se editan las reglas de firestore del superadmin?', 'vendedor');
+      const q5 = validateRoleQueryBoundary('¿Cómo descargo el respaldo general de datos del superadmin?', 'vendedor');
       expect(q5.allowed).toBe(false);
       expect(q5.message).toContain('Acceso Restringido');
     });
@@ -67,7 +67,7 @@ describe('Hierarchical RAG Assistant - Security & Role Boundaries', () => {
       expect(q4.allowed).toBe(false);
     });
 
-    it('allows Admin to manage users and pricing, but blocks Superadmin cloud governance', () => {
+    it('allows Admin to manage users and pricing, but blocks Superadmin directorship', () => {
       // Legitimate admin actions
       const q1 = validateRoleQueryBoundary('¿Cómo dar de alta a un nuevo vendedor con su PIN?', 'admin');
       expect(q1.allowed).toBe(true);
@@ -76,7 +76,7 @@ describe('Hierarchical RAG Assistant - Security & Role Boundaries', () => {
       expect(q2.allowed).toBe(true);
 
       // Blocked superadmin actions
-      const q3 = validateRoleQueryBoundary('¿Cómo modifico las reglas de firestore a nivel de kernel?', 'admin');
+      const q3 = validateRoleQueryBoundary('¿Cómo descargo el respaldo general o auditoría global de superadmin?', 'admin');
       expect(q3.allowed).toBe(false);
       expect(q3.message).toContain('Acceso Restringido por Nivel de Rol (Administrador)');
     });
@@ -88,10 +88,10 @@ describe('Hierarchical RAG Assistant - Security & Role Boundaries', () => {
       const q2 = validateRoleQueryBoundary('¿Cómo se hace un conteo ciego?', 'superadmin');
       expect(q2.allowed).toBe(true);
 
-      const q3 = validateRoleQueryBoundary('¿Cómo se administran los PINs?', 'superadmin');
+      const q3 = validateRoleQueryBoundary('¿Cómo se administran los usuarios?', 'superadmin');
       expect(q3.allowed).toBe(true);
 
-      const q4 = validateRoleQueryBoundary('¿Cuáles son las cuentas google autorizadas?', 'superadmin');
+      const q4 = validateRoleQueryBoundary('¿Cuáles son las cuentas directivas autorizadas?', 'superadmin');
       expect(q4.allowed).toBe(true);
     });
   });
@@ -165,13 +165,13 @@ describe('Hierarchical RAG Assistant - Security & Role Boundaries', () => {
       expect(fineRes).toContain('Módulo de Multas y Sanciones');
     });
 
-    it('returns superadmin guidance for google whitelist and backups', () => {
-      const saRes = queryLocalRoleRAG('¿Cuáles son las cuentas google de la whitelist?', 'superadmin');
+    it('returns superadmin guidance for directorship and backups', () => {
+      const saRes = queryLocalRoleRAG('¿Cuáles son las cuentas directivas autorizadas?', 'superadmin');
       expect(saRes).toContain('esaalberdi@gmail.com');
       expect(saRes).toContain('lemaitremariejoe@gmail.com');
 
-      const backupRes = queryLocalRoleRAG('¿Cómo hacer un backup de la base de datos?', 'superadmin');
-      expect(backupRes).toContain('Respaldo Global de Firestore');
+      const backupRes = queryLocalRoleRAG('¿Cómo hacer un backup de los datos del sistema?', 'superadmin');
+      expect(backupRes).toContain('Respaldo General de Datos del Sistema');
     });
   });
 });

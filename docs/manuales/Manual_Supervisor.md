@@ -29,7 +29,7 @@ El **Supervisor** es responsable del control operativo en piso: auditorías de i
 ### B. Auditorías de Inventario Físico (Conteos Ciegos)
 1. El supervisor selecciona los productos a auditar.
 2. Ingresa la cantidad física real contada en los mostradores y almacenes.
-3. El sistema compara el conteo físico contra el stock en Firestore y calcula la discrepancia:
+3. El sistema compara el conteo físico contra el stock registrado en el sistema y calcula la discrepancia:
    * **Faltante**: Mercadería faltante no registrada.
    * **Sobrante**: Excedente físico.
 4. Las auditorías quedan registradas con firma digital del supervisor y marca de tiempo.
