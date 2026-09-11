@@ -1,16 +1,28 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Store, Loader2, KeyRound, UserCircle, ShieldCheck } from 'lucide-react';
+import { Loader2, KeyRound, Mail, Lock, ShieldCheck, UserCheck, Shield } from 'lucide-react';
 
 const Login = () => {
   const [loginMethod, setLoginMethod] = useState('pin'); // 'pin', 'supervisor', 'admin' or 'superadmin'
   const [pin, setPin] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const { loginWithGoogle, loginWithPin, theme, toggleTheme } = useAuth();
+  const { loginWithGoogle, loginWithPin, loginWithSimulatedEmail, theme, toggleTheme } = useAuth();
   const navigate = useNavigate();
+
+  const handleTabChange = (method) => {
+    setLoginMethod(method);
+    setError('');
+    if (method === 'supervisor' && !email) {
+      setEmail('supervisor@mjcompany.io');
+    } else if (method === 'admin' && !email) {
+      setEmail('admin@mjcompany.io');
+    }
+  };
 
   const handleGoogleSuperadminSubmit = async () => {
     setError('');
@@ -38,6 +50,22 @@ const Login = () => {
     } catch (err) {
       console.error(err);
       setError(err.message || 'Error al iniciar sesión con PIN.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSimulatedEmailSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setIsSubmitting(true);
+
+    try {
+      await loginWithSimulatedEmail(email, password, loginMethod);
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Error al autenticar.');
     } finally {
       setIsSubmitting(false);
     }
@@ -80,16 +108,36 @@ const Login = () => {
         </div>
         
         <div className="tabs" style={{marginBottom: '1.5rem', display: 'flex', gap: '0.25rem'}}>
-          <div className={`tab ${loginMethod === 'pin' ? 'active' : ''}`} onClick={() => setLoginMethod('pin')} style={{fontSize: '0.85rem', padding: '0.5rem'}}>
+          <div 
+            className={`tab ${loginMethod === 'pin' ? 'active' : ''}`} 
+            onClick={() => handleTabChange('pin')} 
+            style={{fontSize: '0.85rem', padding: '0.5rem', cursor: 'pointer'}}
+            title="Vendedor"
+          >
             <KeyRound size={14} style={{display: 'inline', marginRight: '0.25rem'}}/> Vendedor
           </div>
-          <div className={`tab ${loginMethod === 'supervisor' ? 'active' : ''}`} onClick={() => setLoginMethod('supervisor')} style={{fontSize: '0.85rem', padding: '0.5rem'}}>
-            <KeyRound size={14} style={{display: 'inline', marginRight: '0.25rem'}}/> Supervisor
+          <div 
+            className={`tab ${loginMethod === 'supervisor' ? 'active' : ''}`} 
+            onClick={() => handleTabChange('supervisor')} 
+            style={{fontSize: '0.85rem', padding: '0.5rem', cursor: 'pointer'}}
+            title="Supervisor"
+          >
+            <UserCheck size={14} style={{display: 'inline', marginRight: '0.25rem'}}/> Supervisor
           </div>
-          <div className={`tab ${loginMethod === 'admin' ? 'active' : ''}`} onClick={() => setLoginMethod('admin')} style={{fontSize: '0.85rem', padding: '0.5rem'}}>
-            <KeyRound size={14} style={{display: 'inline', marginRight: '0.25rem'}}/> Admin
+          <div 
+            className={`tab ${loginMethod === 'admin' ? 'active' : ''}`} 
+            onClick={() => handleTabChange('admin')} 
+            style={{fontSize: '0.85rem', padding: '0.5rem', cursor: 'pointer'}}
+            title="Admin"
+          >
+            <Shield size={14} style={{display: 'inline', marginRight: '0.25rem'}}/> Admin
           </div>
-          <div className={`tab ${loginMethod === 'superadmin' ? 'active' : ''}`} onClick={() => setLoginMethod('superadmin')} style={{fontSize: '0.85rem', padding: '0.5rem', cursor: 'pointer'}} title="Superadmin">
+          <div 
+            className={`tab ${loginMethod === 'superadmin' ? 'active' : ''}`} 
+            onClick={() => handleTabChange('superadmin')} 
+            style={{fontSize: '0.85rem', padding: '0.5rem', cursor: 'pointer'}} 
+            title="Superadmin"
+          >
             ⚙️ Superadmin
           </div>
         </div>
@@ -148,39 +196,95 @@ const Login = () => {
           </div>
         )}
 
-        {/* PIN Form para Vendedor, Supervisor y Admin */}
-        <form 
-          onSubmit={handlePinSubmit}
-          style={{ display: (loginMethod === 'pin' || loginMethod === 'supervisor' || loginMethod === 'admin') ? 'block' : 'none' }}
-        >
-          <div className="form-group">
-            <label htmlFor="vendor-pin">PIN de Acceso</label>
-            <input 
-              id="vendor-pin"
-              name="pin"
-              type="password" 
-              className="input-field" 
-              value={pin}
-              onChange={(e) => setPin(e.target.value)}
-              placeholder="••••••"
-              maxLength="6"
-              required={loginMethod === 'pin' || loginMethod === 'supervisor' || loginMethod === 'admin'}
-              style={{textAlign: 'center', fontSize: '1.25rem', letterSpacing: '0.25rem'}}
-            />
-          </div>
-          
-          <button 
-            type="submit" 
-            className="btn btn-primary btn-block"
-            disabled={isSubmitting || pin.length < 6}
-          >
-            {isSubmitting ? (
-              <span className="flex-center"><Loader2 className="spinner" size={18} style={{marginRight: '0.5rem'}} /> Iniciando...</span>
-            ) : (
-              loginMethod === 'admin' ? 'Ingresar como Administrador' : (loginMethod === 'supervisor' ? 'Ingresar como Supervisor' : 'Ingresar al POS')
-            )}
-          </button>
-        </form>
+        {/* PIN Form EXCLUSIVO para Vendedor */}
+        {loginMethod === 'pin' && (
+          <form onSubmit={handlePinSubmit}>
+            <div className="form-group">
+              <label htmlFor="vendor-pin">PIN de Vendedor (6 dígitos)</label>
+              <input 
+                id="vendor-pin"
+                name="pin"
+                type="password" 
+                className="input-field" 
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
+                placeholder="••••••"
+                maxLength="6"
+                required
+                style={{textAlign: 'center', fontSize: '1.25rem', letterSpacing: '0.25rem'}}
+              />
+              <p style={{ margin: '0.4rem 0 0', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                Ingresa con tu PIN de caja de 6 dígitos asignado.
+              </p>
+            </div>
+            
+            <button 
+              type="submit" 
+              className="btn btn-primary btn-block"
+              disabled={isSubmitting || pin.length < 6}
+            >
+              {isSubmitting ? (
+                <span className="flex-center"><Loader2 className="spinner" size={18} style={{marginRight: '0.5rem'}} /> Validando PIN...</span>
+              ) : (
+                'Ingresar al POS'
+              )}
+            </button>
+          </form>
+        )}
+
+        {/* Correo Simulado Corporativo (@mjcompany.io) para Supervisor y Admin */}
+        {(loginMethod === 'supervisor' || loginMethod === 'admin') && (
+          <form onSubmit={handleSimulatedEmailSubmit}>
+            <div className="form-group">
+              <label htmlFor="corporate-email">
+                <Mail size={14} style={{ display: 'inline', marginRight: '4px' }} />
+                Correo Corporativo (@mjcompany.io)
+              </label>
+              <input 
+                id="corporate-email"
+                name="email"
+                type="email" 
+                className="input-field" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={loginMethod === 'supervisor' ? 'supervisor@mjcompany.io' : 'admin@mjcompany.io'}
+                required
+              />
+              <p style={{ margin: '0.3rem 0 0', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                Solo se admiten correos con extensión oficial <strong>@mjcompany.io</strong>.
+              </p>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="corporate-password">
+                <Lock size={14} style={{ display: 'inline', marginRight: '4px' }} />
+                Contraseña de Acceso
+              </label>
+              <input 
+                id="corporate-password"
+                name="password"
+                type="password" 
+                className="input-field" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+              />
+            </div>
+            
+            <button 
+              type="submit" 
+              className="btn btn-primary btn-block"
+              disabled={isSubmitting || !email.trim() || !password.trim()}
+            >
+              {isSubmitting ? (
+                <span className="flex-center"><Loader2 className="spinner" size={18} style={{marginRight: '0.5rem'}} /> Autenticando...</span>
+              ) : (
+                loginMethod === 'admin' ? 'Ingresar como Administrador' : 'Ingresar como Supervisor'
+              )}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );

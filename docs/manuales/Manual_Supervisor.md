@@ -9,10 +9,11 @@
 
 El **Supervisor** es responsable del control operativo en piso: auditorías de inventario físico, control y autorización de mermas, registro de depósitos de efectivo a cuentas bancarias y verificación del cumplimiento de turnos en **MJ-Company**.
 
-### Acceso con PIN:
+### Acceso Corporativo con Correo (@mjcompany.io):
 1. En la pantalla de inicio, selecciona la pestaña **Supervisor**.
-2. Ingresa el PIN de 6 dígitos asignado (por defecto de prueba: `222222`).
-3. El sistema te otorgará acceso directo al **Panel del Supervisor**.
+2. Ingresa tu correo corporativo oficial (por defecto de prueba: `supervisor@mjcompany.io`).
+3. Ingresa tu contraseña de acceso (por defecto de prueba: `Supervisor*123`).
+4. El sistema validará tu pertenencia al dominio corporativo y te otorgará acceso directo al **Panel del Supervisor**.
 
 ---
 

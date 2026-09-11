@@ -9,8 +9,11 @@
 
 El rol de **Administrador** concentra las facultades de gestión comercial, configuración de catálogo, control financiero, administración de personal y altas de usuarios en **MJ-Company**.
 
-### Acceso al Sistema:
-* En la pantalla de login, selecciona la pestaña **Admin** e ingresa el PIN de 6 dígitos asignado (por defecto de prueba: `333333`).
+### Acceso Corporativo con Correo (@mjcompany.io):
+1. En la pantalla de login, selecciona la pestaña **Admin**.
+2. Ingresa tu correo corporativo oficial (por defecto de prueba: `admin@mjcompany.io`).
+3. Ingresa tu contraseña administrativa (por defecto de prueba: `Admin*123`).
+4. El sistema verificará tus credenciales y te dirigirá al **Panel de Administración General**.
 
 ---
 

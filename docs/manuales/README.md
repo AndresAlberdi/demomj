@@ -31,6 +31,23 @@ Este conjunto de manuales cubre el ciclo completo de vida del sistema de punto d
    * Logs de auditoría global y trazabilidad de eventos.
    * Respaldos, reseteo y sincronización de base de datos.
 
+5. [🤖 **Asistente RAG con IA Generativa**](./Manual_Superadmin.md#4-asistente-rag-con-ia-generativa)
+   * Asistente inteligente flotante integrado en la plataforma.
+   * Modelo Google Gemini con aislamiento jerárquico estricto por rol.
+   * Motor de respaldo local instantáneo (Zero-Database).
+
+---
+
+## 🔑 Credenciales Oficiales de Demostración:
+
+| Rol | Método de Acceso | Identificador / Correo | Contraseña / PIN |
+| :--- | :--- | :--- | :--- |
+| **Vendedor** | PIN numérico (6 dígitos) | `111111` | *(Solo PIN)* |
+| **Supervisor** | Correo Corporativo | `supervisor@mjcompany.io` | `Supervisor*123` |
+| **Admin** | Correo Corporativo | `admin@mjcompany.io` | `Admin*123` |
+| **Superadmin** | **Google Sign-In** | `esaalberdi@gmail.com` | *(Autenticación Google)* |
+| **Superadmin** | **Google Sign-In** | `lemaitremariejoe@gmail.com` | *(Autenticación Google)* |
+
 ---
 
 *Desarrollado para MJ-Company.*

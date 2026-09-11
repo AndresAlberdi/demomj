@@ -142,7 +142,9 @@ const VendorDashboard = () => {
 
   const isAdmin = userRole === 'admin' ||
                   currentUser?.role === 'admin' || 
+                  currentUser?.email === 'admin@demob.com' ||
                   currentUser?.email === 'esaalberdi@gmail.com' ||
+                  currentUser?.email === 'lemaitremariejoe@gmail.com' ||
                   currentUser?.email === 'pretsodatabase@gmail.com' ||
                   currentUser?.email === 'mrwally@snack.com' ||
                   currentUser?.email === 'admin@demomj.com' ||

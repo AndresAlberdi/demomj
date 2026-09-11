@@ -25,3 +25,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local migration & utility scripts
+*.mjs
+sync_demob_to_mj.mjs
+create_admin.mjs
+migrate_admins.mjs
+seed_demo_users.mjs
+capture_all_screens.mjs
+reset_inventory.js
+delete_products.js
+upload_products.js

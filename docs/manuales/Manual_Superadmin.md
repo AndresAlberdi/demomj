@@ -61,10 +61,15 @@ function isSuperAdmin() {
 
 Para fines de demostración y capacitación del personal, se encuentran aprovisionados los siguientes usuarios iniciales en la base de datos:
 
-| Rol | Método de Acceso | Identificador / PIN | Nombre Asignado |
-| :--- | :--- | :--- | :--- |
-| **Vendedor** | PIN numérico (6 dígitos) | `111111` | Vendedor Mostrador |
-| **Supervisor** | PIN numérico (6 dígitos) | `222222` | Supervisor Turno |
-| **Admin** | PIN numérico (6 dígitos) | `333333` | Administrador Local |
-| **Superadmin** | **Botón de Google** | `esaalberdi@gmail.com` | Superadmin E.S.A. |
-| **Superadmin** | **Botón de Google** | `lemaitremariejoe@gmail.com` | Superadmin Marie-Joe |
+| Rol | Método de Acceso | Identificador / Correo | Contraseña / PIN | Nombre Asignado |
+| :--- | :--- | :--- | :--- | :--- |
+| **Vendedor** | PIN numérico (6 dígitos) | `111111` | *(Solo PIN)* | Vendedor Mostrador |
+| **Supervisor** | Correo Corporativo | `supervisor@mjcompany.io` | `Supervisor*123` | Supervisor Turno |
+| **Admin** | Correo Corporativo | `admin@mjcompany.io` | `Admin*123` | Administrador Local |
+| **Superadmin** | **Botón de Google** | `esaalberdi@gmail.com` | *(Autenticación Google)* | Superadmin E.S.A. |
+| **Superadmin** | **Botón de Google** | `lemaitremariejoe@gmail.com` | *(Autenticación Google)* | Superadmin Marie-Joe |
+
+---
+
+## 4. Asistente RAG con IA Generativa
+El sistema cuenta con un **Asistente Inteligente MJ** accesible permanentemente en la esquina inferior derecha. Dispone de un motor RAG con IA generativa (Gemini + respaldo local) con **aislamiento jerárquico estricto**: cada rol solo puede consultar información de su propio nivel o inferiores, protegiendo las funciones de mayor jerarquía.

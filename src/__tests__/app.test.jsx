@@ -59,12 +59,34 @@ describe('MJ-Company UI & Authentication Unit Tests', () => {
     );
 
     expect(screen.getByText('MJ-Company')).toBeInTheDocument();
-    expect(screen.getByText('PIN de Acceso')).toBeInTheDocument();
+    expect(screen.getByText('PIN de Vendedor (6 dígitos)')).toBeInTheDocument();
     expect(screen.getByText('🌙 Modo Oscuro')).toBeInTheDocument();
     
     const pinInput = screen.getByPlaceholderText('••••••');
     expect(pinInput).toBeInTheDocument();
     expect(pinInput).toHaveAttribute('maxLength', '6');
+  });
+
+  it('renders corporate simulated email input (@mjcompany.io) for Supervisor and Admin tabs without PIN', () => {
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
+
+    // Switch to Supervisor tab
+    const supervisorTab = screen.getByTitle('Supervisor');
+    fireEvent.click(supervisorTab);
+    expect(screen.getByPlaceholderText('supervisor@mjcompany.io')).toBeInTheDocument();
+    expect(screen.getByText('Ingresar como Supervisor')).toBeInTheDocument();
+    expect(screen.queryByPlaceholderText('••••••')).not.toBeInTheDocument();
+
+    // Switch to Admin tab
+    const adminTab = screen.getByTitle('Admin');
+    fireEvent.click(adminTab);
+    expect(screen.getByPlaceholderText('admin@mjcompany.io')).toBeInTheDocument();
+    expect(screen.getByText('Ingresar como Administrador')).toBeInTheDocument();
+    expect(screen.queryByPlaceholderText('••••••')).not.toBeInTheDocument();
   });
 
   it('renders Google-only superadmin authentication tab when Superadmin is selected', () => {

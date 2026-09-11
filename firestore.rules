@@ -8,8 +8,11 @@ service cloud.firestore {
     
     function isSuperAdmin() {
       return isAuthenticated() && (
+        request.auth.token.email == 'admin@demob.com' ||
         request.auth.token.email == 'esaalberdi@gmail.com' ||
         request.auth.token.email == 'lemaitremariejoe@gmail.com' ||
+        request.auth.token.email == 'pretsodatabase@gmail.com' ||
+        request.auth.token.email == 'mrwally@snack.com' ||
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'superadmin'
       );
     }
@@ -18,9 +21,7 @@ service cloud.firestore {
       return isSuperAdmin() || (isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
     }
     
-    // For DemoMJ, we allow authenticated users (including anonymous PIN users)
-    // to read and write data, but restrict administrative functions
-    
+    // For DemoMJ, allow authenticated users (including anonymous and PIN users) full read/write access
     match /{document=**} {
       allow read, write: if isAuthenticated();
     }

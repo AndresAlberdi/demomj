@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import VendorDashboard from './pages/VendorDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import SupervisorDashboard from './pages/SupervisorDashboard';
+import AIAssistantModal from './components/AIAssistantModal';
 import './index.css';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -31,6 +32,50 @@ const HomeRedirect = () => {
   return <Navigate to="/vendedor" replace />;
 };
 
+function AppContent() {
+  const { currentUser } = useAuth();
+
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<HomeRedirect />} />
+        <Route path="/login" element={<Login />} />
+        <Route 
+          path="/vendedor/*" 
+          element={
+            <ProtectedRoute allowedRoles={['vendedor', 'supervisor', 'admin', 'superadmin']}>
+              <VendorDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/supervisor/*" 
+          element={
+            <ProtectedRoute allowedRoles={['supervisor', 'admin', 'superadmin']}>
+              <SupervisorDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/*" 
+          element={
+            <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
+              <AdminDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        {/* Default redirect */}
+        <Route 
+          path="*" 
+          element={<Navigate to="/" replace />} 
+        />
+      </Routes>
+
+      {currentUser && <AIAssistantModal />}
+    </>
+  );
+}
+
 function App() {
   React.useEffect(() => {
     const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
@@ -44,39 +89,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Routes>
-          <Route path="/" element={<HomeRedirect />} />
-          <Route path="/login" element={<Login />} />
-          <Route 
-            path="/vendedor/*" 
-            element={
-              <ProtectedRoute allowedRoles={['vendedor', 'supervisor', 'admin', 'superadmin']}>
-                <VendorDashboard />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/supervisor/*" 
-            element={
-              <ProtectedRoute allowedRoles={['supervisor', 'admin', 'superadmin']}>
-                <SupervisorDashboard />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/admin/*" 
-            element={
-              <ProtectedRoute allowedRoles={['admin', 'superadmin']}>
-                <AdminDashboard />
-              </ProtectedRoute>
-            } 
-          />
-          {/* Default redirect */}
-          <Route 
-            path="*" 
-            element={<Navigate to="/" replace />} 
-          />
-        </Routes>
+        <AppContent />
       </Router>
     </AuthProvider>
   );

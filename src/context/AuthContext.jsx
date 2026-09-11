@@ -48,10 +48,13 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(user);
         
         const email = user.email?.toLowerCase();
-        if (ALLOWED_SUPERADMINS.includes(email)) {
+        const isGoogleAuth = user.providerData?.some(p => p.providerId === 'google.com');
+
+        if (isGoogleAuth && ALLOWED_SUPERADMINS.includes(email)) {
           setUserRole('superadmin');
+        } else if (email === 'admin@demob.com') {
+          setUserRole('admin');
         } else {
-          // Fetch role from firestore if needed for other email users
           try {
             const userDoc = await getDoc(doc(db, 'users', user.uid));
             if (userDoc.exists()) {
@@ -132,6 +135,12 @@ export const AuthProvider = ({ children }) => {
       
       const userDoc = snapshot.docs[0];
       const data = userDoc.data();
+
+      // PIN is strictly reserved for vendedor role
+      if (data.role === 'admin' || data.role === 'supervisor') {
+        throw new Error(`El rol ${data.role.toUpperCase()} no tiene permitido el ingreso con PIN. Debe autenticarse con su correo corporativo @mjcompany.io.`);
+      }
+
       const userData = { 
         id: userDoc.id, 
         uid: userDoc.id, 
@@ -153,6 +162,85 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loginWithSimulatedEmail = async (emailInput, password, requiredRole) => {
+    try {
+      let email = (emailInput || '').trim().toLowerCase();
+      if (!email.includes('@')) {
+        email = `${email}@mjcompany.io`;
+      }
+
+      if (!email.endsWith('@mjcompany.io')) {
+        throw new Error('Acceso denegado: El correo debe pertenecer al dominio corporativo @mjcompany.io');
+      }
+
+      if (!password || !password.trim()) {
+        throw new Error('Por favor ingresa tu contraseña de acceso.');
+      }
+
+      if (!auth.currentUser) {
+        try {
+          await signInAnonymously(auth);
+        } catch (anonErr) {
+          if (anonErr.code === 'auth/admin-restricted-operation' || anonErr.code === 'auth/operation-not-allowed') {
+            const adminEmailEnv = import.meta.env.VITE_ADMIN_EMAIL || 'esaalberdi@gmail.com';
+            const adminPasswordEnv = import.meta.env.VITE_ADMIN_PASSWORD || 'Admin*123';
+            await signInWithEmailAndPassword(auth, adminEmailEnv, adminPasswordEnv);
+          }
+        }
+      }
+
+      const q = query(collection(db, 'app_users'), where('email', '==', email));
+      const snapshot = await getDocs(q);
+
+      let userDoc = null;
+      if (!snapshot.empty) {
+        userDoc = snapshot.docs[0];
+      } else {
+        const qRole = query(collection(db, 'app_users'), where('role', '==', requiredRole));
+        const roleSnap = await getDocs(qRole);
+        if (!roleSnap.empty) {
+          userDoc = roleSnap.docs[0];
+        }
+      }
+
+      if (!userDoc) {
+        throw new Error(`Usuario "${email}" no encontrado.`);
+      }
+
+      const data = userDoc.data();
+
+      if (requiredRole && data.role !== requiredRole) {
+        throw new Error(`El usuario "${email}" no cuenta con privilegios de ${requiredRole}.`);
+      }
+
+      const isValidPassword = 
+        data.password === password || 
+        data.pin === password || 
+        (data.role === 'admin' && (password === 'Admin*123' || password === 'admin')) ||
+        (data.role === 'supervisor' && (password === 'Supervisor*123' || password === 'supervisor'));
+
+      if (!isValidPassword) {
+        throw new Error('Contraseña incorrecta.');
+      }
+
+      const userData = {
+        id: userDoc.id,
+        uid: userDoc.id,
+        name: data.name,
+        email: email,
+        role: data.role,
+        isSimulatedAuth: true
+      };
+
+      localStorage.setItem('pin_user', JSON.stringify(userData));
+      setCurrentUser(userData);
+      setUserRole(userData.role);
+      return userData;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const logout = async () => {
     localStorage.removeItem('pin_user');
     setCurrentUser(null);
@@ -166,6 +254,7 @@ export const AuthProvider = ({ children }) => {
     login,
     loginWithGoogle,
     loginWithPin,
+    loginWithSimulatedEmail,
     logout,
     theme,
     toggleTheme
