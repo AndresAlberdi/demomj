@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-describe('DemoB Pago Mixto & Security Rules', () => {
+describe('MJ-Company Pago Mixto & Security Rules', () => {
 
   const calculateSaleSplit = (total, method, customCash) => {
     if (method === 'Efectivo') return { cashPaid: total, qrPaid: 0 };

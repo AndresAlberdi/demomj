@@ -1,25 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root, [data-theme="light"] {
-  /* Color Palette - Wally La Estación */
-  --color-principal: #0a137c;
-  --color-secundario-blue: #276cd3;
-  --color-secundario-yellow: #f3d92e;
+  /* Color Palette - MJ-Company */
+  --color-principal: #1b4d3e;
+  --color-secundario-blue: #2e7d32;
+  --color-secundario-yellow: #e8f5e9;
   --color-alert-red: #e7716d;
   
-  --primary-color: #0a137c;
-  --primary-hover: #276cd3;
-  --secondary-color: #276cd3;
-  --accent-yellow: #f3d92e;
-  --bg-color: #f4f6fb;
+  --primary-color: #215737;
+  --primary-hover: #163d27;
+  --secondary-color: #2e7d32;
+  --accent-yellow: #a7f3d0;
+  --bg-color: #f2f8f4;
   --surface-color: #ffffff;
   --card-bg: rgba(255, 255, 255, 0.95);
-  --text-primary: #0a137c;
+  --text-primary: #123321;
   --text-body: #1e293b;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
+  --text-secondary: #3b5245;
+  --text-muted: #627b6d;
   --danger-color: #e7716d;
-  --border-color: #cbd5e1;
+  --border-color: #cfe3d6;
   
   /* Status Colors */
   --color-green: #16a34a;
@@ -35,9 +35,9 @@
   --card-bg-guindo: #f7e6ec;
   
   /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.92);
-  --glass-border: rgba(10, 19, 124, 0.15);
-  --glass-shadow: 0 8px 32px 0 rgba(10, 19, 124, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.94);
+  --glass-border: rgba(33, 87, 55, 0.18);
+  --glass-shadow: 0 8px 32px 0 rgba(33, 87, 55, 0.08);
   
   /* Form inputs & dropdowns */
   --input-bg: #ffffff;
@@ -45,7 +45,7 @@
   --input-border: #cbd5e1;
   --dropdown-bg: #ffffff;
   --dropdown-text: #0f172a;
-  --dropdown-hover: #e0e8f9;
+  --dropdown-hover: #e8f5e9;
   
   /* Metrics */
   --border-radius: 16px;
@@ -53,25 +53,25 @@
 }
 
 [data-theme="dark"] {
-  /* Color Palette - Wally La Estación (Dark Mode) */
-  --color-principal: #0a137c;
-  --color-secundario-blue: #276cd3;
-  --color-secundario-yellow: #f3d92e;
+  /* Color Palette - MJ-Company (Dark Mode) */
+  --color-principal: #1b4d3e;
+  --color-secundario-blue: #2e7d32;
+  --color-secundario-yellow: #a7f3d0;
   --color-alert-red: #e7716d;
   
-  --primary-color: #276cd3;
-  --primary-hover: #3b82f6;
-  --secondary-color: #f3d92e;
-  --accent-yellow: #f3d92e;
-  --bg-color: #05081c;
-  --surface-color: #0c1445;
-  --card-bg: rgba(12, 20, 69, 0.92);
-  --text-primary: #ffffff;
+  --primary-color: #34d399;
+  --primary-hover: #10b981;
+  --secondary-color: #4ade80;
+  --accent-yellow: #6ee7b7;
+  --bg-color: #06160e;
+  --surface-color: #0d261a;
+  --card-bg: rgba(13, 38, 26, 0.94);
+  --text-primary: #f0fdf4;
   --text-body: #f8fafc;
   --text-secondary: #cbd5e1;
   --text-muted: #94a3b8;
   --danger-color: #e7716d;
-  --border-color: rgba(39, 108, 211, 0.3);
+  --border-color: rgba(52, 211, 153, 0.25);
   
   /* Status Colors */
   --color-green: #4ade80;
@@ -87,17 +87,17 @@
   --card-bg-guindo: rgba(159, 18, 57, 0.15);
   
   /* Glassmorphism */
-  --glass-bg: rgba(10, 19, 124, 0.65);
-  --glass-border: rgba(39, 108, 211, 0.35);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  --glass-bg: rgba(9, 28, 19, 0.88);
+  --glass-border: rgba(52, 211, 153, 0.25);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
   
   /* Form inputs & dropdowns */
-  --input-bg: #0d174d;
+  --input-bg: #0b2015;
   --input-text: #ffffff;
-  --input-border: #276cd3;
-  --dropdown-bg: #0a123d;
+  --input-border: #1b4d3e;
+  --dropdown-bg: #091b12;
   --dropdown-text: #ffffff;
-  --dropdown-hover: #1b2d80;
+  --dropdown-hover: #143525;
 }
 
 * {
@@ -109,12 +109,16 @@
 body {
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-color);
-  background-image: linear-gradient(135deg, var(--color-principal) 0%, var(--color-secundario-yellow) 100%);
+  background-image: radial-gradient(at 15% 15%, rgba(33, 87, 55, 0.12) 0px, transparent 55%), radial-gradient(at 85% 85%, rgba(46, 125, 50, 0.10) 0px, transparent 55%), linear-gradient(135deg, #f2f8f4 0%, #ffffff 50%, #eaf5ee 100%);
   background-attachment: fixed;
   color: var(--text-primary);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+}
+
+[data-theme="dark"] body {
+  background-image: radial-gradient(at 15% 15%, rgba(52, 211, 153, 0.15) 0px, transparent 55%), radial-gradient(at 85% 85%, rgba(33, 87, 55, 0.3) 0px, transparent 55%), linear-gradient(135deg, #05140d 0%, #092116 50%, #0c2b1d 100%);
 }
 
 /* Glassmorphism Utilities */
@@ -134,6 +138,12 @@ body {
   align-items: center;
   min-height: 100vh;
   padding: 1rem;
+  background: linear-gradient(135deg, #133924 0%, #1f5436 40%, #eef7f1 100%);
+  background-attachment: fixed;
+}
+
+[data-theme="dark"] .auth-container {
+  background: linear-gradient(135deg, #041009 0%, #0a2418 50%, #123826 100%);
 }
 
 .auth-card {

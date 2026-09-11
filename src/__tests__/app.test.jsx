@@ -4,18 +4,25 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import App from '../App';
 import Login from '../pages/Login';
+import { ALLOWED_SUPERADMINS } from '../context/AuthContext';
 
 vi.mock('firebase/auth', () => ({
   getAuth: vi.fn(),
   onAuthStateChanged: vi.fn(() => vi.fn()),
   signInWithEmailAndPassword: vi.fn(),
   signOut: vi.fn(),
+  signInAnonymously: vi.fn(),
+  GoogleAuthProvider: vi.fn(function() {
+    this.setCustomParameters = vi.fn();
+  }),
+  signInWithPopup: vi.fn(),
 }));
 
 vi.mock('firebase/firestore', () => ({
   getFirestore: vi.fn(),
   doc: vi.fn(),
   getDoc: vi.fn(),
+  setDoc: vi.fn(),
   collection: vi.fn(),
   query: vi.fn(),
   getDocs: vi.fn(),
@@ -36,21 +43,22 @@ vi.mock('../context/AuthContext', async (importOriginal) => {
       currentUser: null,
       userRole: null,
       login: vi.fn(),
+      loginWithGoogle: vi.fn(),
       loginWithPin: vi.fn(),
       logout: vi.fn(),
     })
   };
 });
 
-describe('Wally La Estación UI & Authentication Unit Tests', () => {
-  it('renders vendor PIN login tab by default with 6-digit PIN requirements and Wally La Estación branding', () => {
+describe('MJ-Company UI & Authentication Unit Tests', () => {
+  it('renders vendor PIN login tab by default with 6-digit PIN requirements and MJ-Company branding', () => {
     render(
       <BrowserRouter>
         <Login />
       </BrowserRouter>
     );
 
-    expect(screen.getByText('Wally La Estación')).toBeInTheDocument();
+    expect(screen.getByText('MJ-Company')).toBeInTheDocument();
     expect(screen.getByText('PIN de Acceso')).toBeInTheDocument();
     expect(screen.getByText('🌙 Modo Oscuro')).toBeInTheDocument();
     
@@ -59,7 +67,7 @@ describe('Wally La Estación UI & Authentication Unit Tests', () => {
     expect(pinInput).toHaveAttribute('maxLength', '6');
   });
 
-  it('renders admin email/password login tab with Chrome autofill attributes', () => {
+  it('renders Google-only superadmin authentication tab when Superadmin is selected', () => {
     render(
       <BrowserRouter>
         <Login />
@@ -70,16 +78,14 @@ describe('Wally La Estación UI & Authentication Unit Tests', () => {
     const superadminTab = screen.getByTitle('Superadmin');
     fireEvent.click(superadminTab);
 
-    const emailInput = screen.getByPlaceholderText('admin@demo.com');
-    const passwordInput = screen.getByPlaceholderText('••••••••');
+    expect(screen.getByText('Acceso Restringido a Superadministración')).toBeInTheDocument();
+    expect(screen.getByText('Continuar con Google')).toBeInTheDocument();
+  });
 
-    expect(emailInput).toBeInTheDocument();
-    expect(emailInput).toHaveAttribute('autoComplete', 'username');
-    expect(emailInput).toHaveAttribute('name', 'email');
-
-    expect(passwordInput).toBeInTheDocument();
-    expect(passwordInput).toHaveAttribute('autoComplete', 'current-password');
-    expect(passwordInput).toHaveAttribute('name', 'password');
+  it('strictly validates allowed superadmin email whitelist', () => {
+    expect(ALLOWED_SUPERADMINS).toContain('esaalberdi@gmail.com');
+    expect(ALLOWED_SUPERADMINS).toContain('lemaitremariejoe@gmail.com');
+    expect(ALLOWED_SUPERADMINS.length).toBe(2);
   });
 
   it('calculates default costPrice at 20% below salePrice and default minStock at 3', () => {

@@ -35,7 +35,9 @@ function App() {
   React.useEffect(() => {
     const projectId = import.meta.env.VITE_FIREBASE_PROJECT_ID;
     if (projectId !== 'snack-laestacion') {
-      document.title = "(DEMO) Wally La Estación";
+      document.title = "(DEMO) MJ-Company";
+    } else {
+      document.title = "MJ-Company";
     }
   }, []);
 

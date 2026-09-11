@@ -31,13 +31,13 @@ export default function Navbar() {
         {/* Brand & Logo */}
         <div className="navbar-brand" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
           <img 
-            src="/logo-racquet.jpeg" 
-            alt="Wally La Estación Logo" 
+            src="/logo.png" 
+            alt="MJ-Company Logo" 
             className="navbar-logo" 
           />
           <div className="brand-text">
             <span className="brand-title">
-              Wally La Estación
+              MJ-Company
               {import.meta.env.VITE_FIREBASE_PROJECT_ID !== 'snack-laestacion' && (
                 <span className="demo-badge" style={{ 
                   marginLeft: '8px', 

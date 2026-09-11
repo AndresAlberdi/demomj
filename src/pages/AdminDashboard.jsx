@@ -1280,7 +1280,7 @@ const AdminDashboard = () => {
       <div className="dashboard-layout">
         <div className="dashboard-header flex-between" style={{ flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <h2>⚙️ Panel de Administración - Wally La Estación</h2>
+            <h2>⚙️ Panel de Administración - MJ-Company</h2>
             <p>Administrador: {currentUser?.email}</p>
             {activeShiftDoc && (
               <div style={{marginTop: '0.5rem'}}>

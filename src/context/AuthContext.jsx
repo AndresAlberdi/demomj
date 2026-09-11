@@ -3,14 +3,18 @@ import {
   signInWithEmailAndPassword, 
   signOut, 
   onAuthStateChanged,
-  signInAnonymously
+  signInAnonymously,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth';
 import { auth, db } from '../firebase';
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
+
+export const ALLOWED_SUPERADMINS = ['esaalberdi@gmail.com', 'lemaitremariejoe@gmail.com'];
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -43,15 +47,8 @@ export const AuthProvider = ({ children }) => {
       if (user && !user.isAnonymous) {
         setCurrentUser(user);
         
-        const adminEmailEnv = import.meta.env.VITE_ADMIN_EMAIL || 'esaalberdi@gmail.com';
-        // Special case for the main admin per instructions
-        if (
-          user.email === 'esaalberdi@gmail.com' ||
-          user.email === 'pretsodatabase@gmail.com' || 
-          user.email === 'mrwally@snack.com' || 
-          user.email === 'admin@demomj.com' ||
-          user.email === adminEmailEnv
-        ) {
+        const email = user.email?.toLowerCase();
+        if (ALLOWED_SUPERADMINS.includes(email)) {
           setUserRole('superadmin');
         } else {
           // Fetch role from firestore if needed for other email users
@@ -80,6 +77,33 @@ export const AuthProvider = ({ children }) => {
   const login = (email, password) => {
     localStorage.removeItem('pin_user');
     return signInWithEmailAndPassword(auth, email, password);
+  };
+
+  const loginWithGoogle = async () => {
+    localStorage.removeItem('pin_user');
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    const result = await signInWithPopup(auth, provider);
+    const email = result.user.email?.toLowerCase();
+
+    if (!ALLOWED_SUPERADMINS.includes(email)) {
+      await signOut(auth);
+      throw new Error(`Acceso denegado: El correo "${email}" no está autorizado como Superadmin.`);
+    }
+
+    try {
+      await setDoc(doc(db, 'users', result.user.uid), {
+        email: email,
+        name: result.user.displayName || 'Superadmin',
+        role: 'superadmin'
+      }, { merge: true });
+    } catch (e) {
+      console.warn('Error guardando rol en Firestore:', e);
+    }
+
+    setCurrentUser(result.user);
+    setUserRole('superadmin');
+    return result.user;
   };
   
   const loginWithPin = async (pin) => {
@@ -140,6 +164,7 @@ export const AuthProvider = ({ children }) => {
     currentUser,
     userRole,
     login,
+    loginWithGoogle,
     loginWithPin,
     logout,
     theme,

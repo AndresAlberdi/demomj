@@ -902,7 +902,7 @@ const VendorDashboard = () => {
       <div className="dashboard-layout">
         <div className="dashboard-header flex-between" style={{ flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <h2>🛒 Terminal de Ventas (POS) - Wally La Estación</h2>
+            <h2>🛒 Terminal de Ventas (POS) - MJ-Company</h2>
             <p>Operador: {currentUser?.name || currentUser?.email || 'Vendedor'}</p>
           </div>
           <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
